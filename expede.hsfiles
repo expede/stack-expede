@@ -1,0 +1,429 @@
+{-# START_FILE CHANGELOG.md #-}
+# Change log
+
+{{ name }} uses [Semantic Versioning][].
+The change log is available through the [releases on GitHub][].
+
+[Semantic Versioning]: http://semver.org/spec/v2.0.0.html
+[releases on GitHub]: https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{ name }}/releases
+
+{-# START_FILE LICENSE.md #-}
+[The MIT License (MIT)][]
+
+Copyright (c) {{year}}{{^year}}2018{{/year}} {{author-name}}{{^author-name}}Author name here{{/author-name}}
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+[The MIT License (MIT)]: https://opensource.org/licenses/MIT
+
+{-# START_FILE README.md #-}
+# [{{ name }}][]
+Description of what this lib does
+
+## Table of Contents
+* [Library Usage](#library-usage)
+* [Installation](#installation)
+* [Development Notes](#development)
+
+## Raison d'etre
+Why bother?
+
+## Installation
+
+[![Hackage](https://img.shields.io/hackage/v/tracks.svg)](https://img.shields.io/hackage/v/tracks.svg)
+[![Stackage LTS](https://stackage.org/package/tracks/badge/lts)](http://stackage.org/lts/package/tracks)
+[![Stackage Nightly](https://stackage.org/package/tracks/badge/nightly)](http://stackage.org/nightly/package/tracks)
+
+Make sure you include the following entry on your [cabal file's
+dependecies](https://www.haskell.org/cabal/users-guide/developing-packages.html#build-information)
+section.
+
+## Development
+
+[![Build Status](https://travis-ci.org/{{ github-username }}/Haskell-{{ name }}.svg?branch=master)](https://travis-ci.org/{{ github-username }}/Haskell-{{ name }})
+[![Github](https://img.shields.io/github/commits-since/{{ github-username }}/haskell-{{ name }}/v0.0.0.1.svg)](https://img.shields.io/github/commits-since/{{ github-username }}/haskell-{{ name }}/v0.0.0.1.svg)
+[![Hackage Dependencies](https://img.shields.io/hackage-deps/v/{{ name }}.svg)](https://img.shields.io/hackage/v/{{ name }}.svg)
+
+### Getting started
+
+1. Make sure you have the [stack binary](https://docs.haskellstack.org/en/stable/install_and_upgrade/) installed.
+
+2. Execute `make setup` to install development dependencies
+
+### Open Commit Bit
+
+{{ name }} has an open commit bit policy: Anyone with an accepted pull request
+gets added as a repository collaborator. Please try to follow these simple
+rules:
+
+* Commit directly onto the master branch only for typos, improvements to the
+  README and documentation.
+
+* Create a feature branch and open a pull-request early for any new features to
+  get feedback.
+
+* Make sure you adhere to the general pull request rules above.
+
+{-# START_FILE Setup.hs #-}
+-- This script is used to build and install your package. Typically you don't
+-- need to change it. The Cabal documentation has more information about this
+-- file: <https://www.haskell.org/cabal/users-guide/installing-packages.html>.
+import qualified Distribution.Simple
+
+main :: IO ()
+main = Distribution.Simple.defaultMain
+
+{-# START_FILE benchmark/Main.hs #-}
+-- You can benchmark your code quickly and effectively with Criterion. See its
+-- website for help: <http://www.serpentine.com/criterion/>.
+
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+
+import RIO
+import Criterion
+import Criterion.Main
+
+main :: IO ()
+main =
+  defaultMain [ bgroup "fmap"
+    [ bench "const" (whnf const ())
+    , bench "const" (whnf const ())
+    ]
+  ]
+
+{-# START_FILE executable/Main.hs #-}
+-- It is generally a good idea to keep all your business logic in your library
+-- and only use it in the executable. Doing so allows others to use what you
+-- wrote in their libraries.
+
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
+
+module Main where
+
+import RIO
+import qualified Example
+
+main :: IO ()
+main = Example.main
+
+{-# START_FILE library/Example.hs #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+
+-- | An example module.
+module Example (main) where
+
+import RIO
+
+-- | An example function.
+main :: IO ()
+main = return ()
+
+{-# START_FILE test/testsuite/Main.hs #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
+
+module Main (main) where
+
+import RIO
+
+import qualified Test.Tasty
+import           Test.Tasty.Hspec
+
+main :: IO ()
+main = do
+  test <- testSpec "{{ name }}" spec
+  Test.Tasty.defaultMain test
+
+spec :: Spec
+spec = parallel $ do
+  it "is trivially true" $ do
+    True `shouldBe` True
+
+{-# START_FILE test/doctest/Main.hs #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
+
+module Main (main) where
+
+import RIO
+
+import System.FilePath.Glob (glob)
+import Test.DocTest         (doctest)
+
+main :: IO ()
+main = glob "src/**/*.hs" >>= doctest
+
+{-# START_FILE .gitignore #-}
+# Created by https://www.gitignore.io/api/vim,emacs,linux,macos,windows,haskell
+
+### Emacs ###
+# -*- mode: gitignore; -*-
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+### Haskell ###
+dist
+dist-*
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+*.dyn_o
+*.dyn_hi
+.hpc
+.hsenv
+.cabal-sandbox/
+cabal.sandbox.config
+*.prof
+*.aux
+*.hp
+*.eventlog
+.stack-work/
+cabal.project.local
+cabal.project.local~
+.HTF/
+.ghc.environment.*
+
+### Linux ###
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### Vim ###
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+
+# Temporary
+.netrwhist
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# End of https://www.gitignore.io/api/vim,emacs,linux,macos,windows,haskell
+
+
+{-# START_FILE package.yaml #-}
+# This YAML file describes your package. Stack will automatically generate a
+# Cabal file when you run `stack build`. See the hpack website for help with
+# this file: <https://github.com/sol/hpack>.
+name: {{ name }}
+version: '0.0.0'
+github: "{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}"
+license: MIT
+author: "{{author-name}}{{^author-name}}Author name here{{/author-name}}"
+maintainer: "{{author-name}}{{^author-name}}Author name here{{/author-name}}"
+# synopsis: A new package.
+# description: {{ name }} is a new package.
+# category: Other
+
+stability: alpha (experimental)
+
+extra-source-files:
+- CHANGELOG.md
+- LICENSE.md
+- package.yaml
+- README.md
+- stack.yaml
+
+ghc-options:
+- -Wall
+# as recommended in:
+# https://functor.tokyo/blog/2017-07-28-ghc-warnings-you-should-enable
+- -Wincomplete-uni-patterns
+- -Wincomplete-record-updates
+
+dependencies:
+- base
+- rio
+
+library:
+  source-dirs: library
+  exposed-modules:
+  - Example
+
+executables:
+  {{ name }}:
+    source-dirs: executable
+    main: Main.hs
+    ghc-options:
+    - -rtsopts
+    - -threaded
+    - -with-rtsopts=-N
+    dependencies:
+    - {{ name }}
+
+tests:
+  {{ name }}-testsuite:
+    main: Main.hs
+    source-dirs: test/testsuite
+    dependencies:
+    - hspec
+    - tasty
+    - tasty-hunit
+    - tasty-hspec
+    - tasty-smallcheck
+    - tasty-rerun
+    - {{ name }}
+    ghc-options:
+    - -rtsopts
+    - -threaded
+    - -with-rtsopts=-N
+
+  {{ name }}-doctest:
+    main: Main.hs
+    source-dirs: test/doctest
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -O2
+    dependencies:
+    - doctest
+    - Glob
+    - QuickCheck
+    - {{ name }}
+
+benchmarks:
+  {{ name }}-benchmarks:
+    source-dirs: benchmark
+    main: Main.hs
+    ghc-options:
+    - -rtsopts
+    - -threaded
+    - -with-rtsopts=-N
+    - -O2
+    dependencies:
+    - {{ name }}
+    - criterion
